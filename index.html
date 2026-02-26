@@ -1,0 +1,1950 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <!-- ========================================================
+       META E SEGURANÇA
+       Impede indexação por motores de busca (privacidade LGPD)
+       ======================================================== -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Pré-Consulta — Neurologia</title>
+
+  <!-- ========================================================
+       TIPOGRAFIA: Google Fonts
+       League Spartan → títulos e botões
+       Merriweather → corpo de texto
+       ======================================================== -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;600;700;800&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300&display=swap"
+    rel="stylesheet" />
+
+  <!-- ========================================================
+       ESTILOS GLOBAIS
+       Paleta:
+         #20515F → principal / headers
+         #DDD0C6 → fundos secundários / cards
+         #E5EBEA → fundo geral
+         #737271 → textos secundários
+         #ffffff → campos de input
+       ======================================================== -->
+  <style>
+    /* ---- Reset e Base ---- */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --cor-principal: #20515F;
+      --cor-principal-dark: #163842;
+      --cor-card: #DDD0C6;
+      --cor-fundo: #E5EBEA;
+      --cor-texto-sec: #737271;
+      --cor-branco: #ffffff;
+      --cor-erro: #c0392b;
+      --cor-sucesso: #27ae60;
+      --cor-borda: #dce1e0;
+      --raio: 12px;
+      --sombra: 0 4px 20px rgba(0, 0, 0, 0.10);
+      --transicao: 0.22s ease;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Merriweather', Georgia, serif;
+      background-color: var(--cor-fundo);
+      color: #2c2c2c;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ---- Tipografia geral ---- */
+    h1,
+    h2,
+    h3,
+    h4,
+    button,
+    label.btn,
+    .btn {
+      font-family: 'League Spartan', 'Arial Black', sans-serif;
+    }
+
+    /* ---- Layout principal ---- */
+    #app-header {
+      background: var(--cor-principal);
+      color: var(--cor-branco);
+      padding: 28px 24px 22px;
+      text-align: center;
+    }
+
+    #app-header h1 {
+      font-size: clamp(1.5rem, 4vw, 2.2rem);
+      letter-spacing: 0.5px;
+      font-weight: 800;
+    }
+
+    #app-header p {
+      font-size: 0.92rem;
+      opacity: 0.82;
+      margin-top: 6px;
+      font-weight: 300;
+    }
+
+    main {
+      flex: 1;
+      width: 100%;
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 28px 16px 48px;
+    }
+
+    footer {
+      background: var(--cor-principal-dark);
+      color: rgba(255, 255, 255, 0.55);
+      text-align: center;
+      padding: 14px 16px;
+      font-size: 0.78rem;
+      font-family: 'League Spartan', sans-serif;
+    }
+
+    footer button#btn-acesso-medico {
+      background: none;
+      border: none;
+      color: rgba(255, 255, 255, 0.3);
+      font-size: 0.72rem;
+      cursor: pointer;
+      margin-top: 4px;
+      font-family: 'League Spartan', sans-serif;
+      transition: color var(--transicao);
+    }
+
+    footer button#btn-acesso-medico:hover {
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    /* ---- Seções do formulário ---- */
+    .secao {
+      background: var(--cor-branco);
+      border-radius: var(--raio);
+      box-shadow: var(--sombra);
+      padding: 28px 24px;
+      margin-bottom: 24px;
+    }
+
+    .secao-titulo {
+      font-size: 1.0rem;
+      font-weight: 700;
+      color: var(--cor-principal);
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      border-bottom: 2px solid var(--cor-card);
+      padding-bottom: 10px;
+      margin-bottom: 22px;
+    }
+
+    /* ---- Grade de campos ---- */
+    .grade {
+      display: grid;
+      gap: 16px;
+      grid-template-columns: 1fr;
+    }
+
+    @media (min-width: 560px) {
+      .grade-2 {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .grade-3 {
+        grid-template-columns: 1fr 1fr 1fr;
+      }
+    }
+
+    /* ---- Campos de formulário ---- */
+    .campo {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .campo label {
+      font-family: 'League Spartan', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--cor-texto-sec);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .campo label .obrigatorio {
+      color: var(--cor-erro);
+      margin-left: 2px;
+    }
+
+    input[type="text"],
+    input[type="date"],
+    input[type="email"],
+    input[type="tel"],
+    select,
+    textarea {
+      width: 100%;
+      min-height: 48px;
+      padding: 10px 14px;
+      border: 1.5px solid #dce1e0;
+      border-radius: 8px;
+      font-family: 'Merriweather', serif;
+      font-size: 0.95rem;
+      color: #2c2c2c;
+      background: var(--cor-branco);
+      transition: border-color var(--transicao), box-shadow var(--transicao);
+      -webkit-appearance: none;
+      appearance: none;
+    }
+
+    select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2320515F' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      padding-right: 36px;
+      cursor: pointer;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      outline: none;
+      border-color: var(--cor-principal);
+      box-shadow: 0 0 0 3px rgba(32, 81, 95, 0.15);
+    }
+
+    input.erro,
+    select.erro,
+    textarea.erro {
+      border-color: var(--cor-erro);
+    }
+
+    textarea {
+      min-height: 110px;
+      resize: vertical;
+      line-height: 1.6;
+    }
+
+    input[readonly] {
+      background: var(--cor-fundo);
+      color: var(--cor-texto-sec);
+      cursor: default;
+    }
+
+    /* ---- Upload de arquivos ---- */
+    .upload-area {
+      border: 2px dashed #b0bec0;
+      border-radius: var(--raio);
+      padding: 32px 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color var(--transicao), background var(--transicao);
+      background: var(--cor-fundo);
+      position: relative;
+    }
+
+    .upload-area:hover,
+    .upload-area.drag-over {
+      border-color: var(--cor-principal);
+      background: rgba(32, 81, 95, 0.05);
+    }
+
+    .upload-area input[type="file"] {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+      min-height: unset;
+    }
+
+    .upload-icon {
+      font-size: 2.4rem;
+      line-height: 1;
+    }
+
+    .upload-texto {
+      font-family: 'League Spartan', sans-serif;
+      font-size: 0.9rem;
+      color: var(--cor-texto-sec);
+      margin-top: 8px;
+    }
+
+    .upload-info {
+      font-size: 0.78rem;
+      color: #9e9e9e;
+      margin-top: 4px;
+    }
+
+    .upload-lista {
+      margin-top: 14px;
+      text-align: left;
+    }
+
+    .upload-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--cor-fundo);
+      border-radius: 6px;
+      padding: 6px 10px;
+      margin-bottom: 6px;
+      font-size: 0.82rem;
+      font-family: 'League Spartan', sans-serif;
+    }
+
+    .upload-item span {
+      flex: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .upload-item button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--cor-erro);
+      font-size: 1rem;
+      padding: 0 4px;
+      font-family: inherit;
+    }
+
+    .sem-exames-wrap {
+      margin-top: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .sem-exames-wrap input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+      accent-color: var(--cor-principal);
+    }
+
+    .sem-exames-wrap label {
+      font-size: 0.85rem;
+      color: var(--cor-texto-sec);
+      cursor: pointer;
+      font-family: 'League Spartan', sans-serif;
+      text-transform: none;
+      font-weight: 400;
+    }
+
+    /* ---- Indicação (aninhado) ---- */
+    .subindicacao {
+      margin-top: 12px;
+      padding: 14px;
+      background: var(--cor-fundo);
+      border-radius: 8px;
+      border-left: 3px solid var(--cor-principal);
+      display: none;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .subindicacao.visivel {
+      display: flex;
+    }
+
+    /* ---- Botão principal ---- */
+    .btn-primario {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      padding: 16px 24px;
+      background: var(--cor-principal);
+      color: var(--cor-branco);
+      border: none;
+      border-radius: var(--raio);
+      font-family: 'League Spartan', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      transition: background var(--transicao), transform var(--transicao), box-shadow var(--transicao);
+      box-shadow: 0 4px 14px rgba(32, 81, 95, 0.35);
+    }
+
+    .btn-primario:hover:not(:disabled) {
+      background: var(--cor-principal-dark);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(32, 81, 95, 0.45);
+    }
+
+    .btn-primario:active:not(:disabled) {
+      transform: translateY(0);
+    }
+
+    .btn-primario:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .btn-secundario {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 10px 18px;
+      background: var(--cor-card);
+      color: var(--cor-principal);
+      border: 1.5px solid var(--cor-principal);
+      border-radius: 8px;
+      font-family: 'League Spartan', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background var(--transicao);
+    }
+
+    .btn-secundario:hover {
+      background: #ccc4bb;
+    }
+
+    .btn-perigo {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 8px 14px;
+      background: transparent;
+      color: var(--cor-erro);
+      border: 1.5px solid var(--cor-erro);
+      border-radius: 8px;
+      font-family: 'League Spartan', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background var(--transicao), color var(--transicao);
+    }
+
+    .btn-perigo:hover {
+      background: var(--cor-erro);
+      color: var(--cor-branco);
+    }
+
+    /* ---- Spinner de carregamento ---- */
+    .spinner-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 9000;
+      background: rgba(32, 81, 95, 0.72);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(4px);
+    }
+
+    .spinner {
+      width: 56px;
+      height: 56px;
+      border: 5px solid rgba(255, 255, 255, 0.25);
+      border-top-color: #ffffff;
+      border-radius: 50%;
+      animation: girar 0.85s linear infinite;
+    }
+
+    @keyframes girar {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .spinner-texto {
+      color: #ffffff;
+      margin-top: 18px;
+      font-family: 'League Spartan', sans-serif;
+      font-size: 1rem;
+      letter-spacing: 0.5px;
+      text-align: center;
+    }
+
+    /* ---- Toast / Feedback ---- */
+    .toast {
+      position: fixed;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 9100;
+      padding: 14px 24px;
+      border-radius: var(--raio);
+      font-family: 'League Spartan', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      box-shadow: 0 8px 28px rgba(0, 0, 0, 0.22);
+      max-width: 90vw;
+      text-align: center;
+      animation: slideUp 0.35s ease;
+    }
+
+    .toast.sucesso {
+      background: var(--cor-sucesso);
+      color: #fff;
+    }
+
+    .toast.erro {
+      background: var(--cor-erro);
+      color: #fff;
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+      }
+    }
+
+    /* ---- Tela de sucesso pós-envio ---- */
+    #tela-sucesso {
+      display: none;
+      text-align: center;
+      padding: 48px 24px;
+    }
+
+    #tela-sucesso .icone-ok {
+      font-size: 4rem;
+    }
+
+    #tela-sucesso h2 {
+      margin: 18px 0 10px;
+      color: var(--cor-principal);
+      font-size: 1.6rem;
+    }
+
+    #tela-sucesso p {
+      color: var(--cor-texto-sec);
+      line-height: 1.7;
+    }
+
+    /* ---- Modal de login médico ---- */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 8000;
+      background: rgba(0, 0, 0, 0.55);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      backdrop-filter: blur(4px);
+    }
+
+    .modal-box {
+      background: var(--cor-branco);
+      border-radius: var(--raio);
+      padding: 36px 28px;
+      width: 100%;
+      max-width: 380px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      text-align: center;
+    }
+
+    .modal-box h2 {
+      font-size: 1.4rem;
+      color: var(--cor-principal);
+      margin-bottom: 20px;
+    }
+
+    .modal-box input {
+      width: 100%;
+      min-height: 48px;
+      padding: 10px 14px;
+      border: 1.5px solid #dce1e0;
+      border-radius: 8px;
+      font-family: 'Merriweather', serif;
+      font-size: 1rem;
+      margin-bottom: 16px;
+    }
+
+    .modal-box input:focus {
+      outline: none;
+      border-color: var(--cor-principal);
+    }
+
+    .modal-erro {
+      color: var(--cor-erro);
+      font-size: 0.82rem;
+      margin-top: -10px;
+      margin-bottom: 14px;
+      font-family: 'League Spartan', sans-serif;
+    }
+
+    /* ---- Painel do médico ---- */
+    #painel-medico {
+      display: none;
+    }
+
+    .painel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .painel-header h2 {
+      color: var(--cor-principal);
+      font-size: 1.4rem;
+    }
+
+    .paciente-card {
+      background: var(--cor-branco);
+      border-radius: var(--raio);
+      box-shadow: var(--sombra);
+      margin-bottom: 16px;
+      overflow: hidden;
+    }
+
+    .paciente-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding: 16px 20px;
+      background: var(--cor-fundo);
+      border-bottom: 1px solid var(--cor-card);
+    }
+
+    .paciente-nome {
+      font-family: 'League Spartan', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--cor-principal);
+    }
+
+    .paciente-data {
+      font-size: 0.78rem;
+      color: var(--cor-texto-sec);
+      font-family: 'League Spartan', sans-serif;
+    }
+
+    .paciente-acoes {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .paciente-dados {
+      padding: 20px;
+      display: none;
+    }
+
+    .paciente-dados.aberto {
+      display: block;
+    }
+
+    .bloco-texto {
+      background: #f9f9f9;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 18px;
+      font-family: 'Merriweather', serif;
+      font-size: 0.88rem;
+      line-height: 1.8;
+      white-space: pre-wrap;
+      color: #2c2c2c;
+      word-break: break-word;
+    }
+
+    /* Negrito nos valores alterados (renderizados via innerHTML) */
+    .bloco-texto strong {
+      font-weight: 700;
+      color: #c0392b;
+    }
+
+    .copiar-btn-wrap {
+      margin-top: 12px;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    /* ---- Lista vazia ---- */
+    .lista-vazia {
+      text-align: center;
+      padding: 48px 24px;
+      color: var(--cor-texto-sec);
+      font-family: 'League Spartan', sans-serif;
+    }
+
+    .lista-vazia .icone {
+      font-size: 2.8rem;
+      margin-bottom: 12px;
+    }
+
+    /* ---- Utilitários ---- */
+    .oculto {
+      display: none !important;
+    }
+
+    .mt-8 {
+      margin-top: 8px;
+    }
+
+    .mt-16 {
+      margin-top: 16px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ============================================================
+     CABEÇALHO PRINCIPAL
+     ============================================================ -->
+  <header id="app-header">
+    <h1>Pré-Consulta Neurológica</h1>
+    <p style="font-size:1.05rem;font-weight:600;opacity:0.95;margin-top:4px;">Dr. Igor Campana</p>
+    <p style="font-size:0.85rem;font-weight:300;opacity:0.75;margin-top:4px;">Preencha com calma — seus dados são
+      confidenciais e serão usados apenas pelo seu médico</p>
+  </header>
+
+  <!-- ============================================================
+     CONTEÚDO PRINCIPAL
+     (alterna entre: formulário, tela de sucesso, painel médico)
+     ============================================================ -->
+  <main>
+
+    <!-- ====================== FORMULÁRIO DO PACIENTE ====================== -->
+    <form id="form-paciente" novalidate autocomplete="off">
+
+      <!-- SEÇÃO 1 — Dados Pessoais -->
+      <section class="secao">
+        <h2 class="secao-titulo">📋 Dados Pessoais</h2>
+        <div class="grade grade-2">
+
+          <div class="campo" style="grid-column: 1 / -1;">
+            <label for="nome">Nome Completo <span class="obrigatorio">*</span></label>
+            <input type="text" id="nome" name="nome" placeholder="Seu nome completo" required />
+          </div>
+
+          <div class="campo">
+            <label for="nascimento">Data de Nascimento <span class="obrigatorio">*</span></label>
+            <input type="date" id="nascimento" name="nascimento" required />
+          </div>
+
+          <div class="campo">
+            <label for="cpf">CPF <span class="obrigatorio">*</span></label>
+            <input type="text" id="cpf" name="cpf" placeholder="000.000.000-00" maxlength="14" required />
+          </div>
+
+          <div class="campo">
+            <label for="estado-civil">Estado Civil <span class="obrigatorio">*</span></label>
+            <select id="estado-civil" name="estadoCivil" required>
+              <option value="">Selecione...</option>
+              <option>Solteiro(a)</option>
+              <option>Casado(a)</option>
+              <option>Divorciado(a)</option>
+              <option>Viúvo(a)</option>
+              <option>União estável</option>
+            </select>
+          </div>
+
+          <div class="campo">
+            <label for="cor">Cor Autodeclarada <span class="obrigatorio">*</span></label>
+            <select id="cor" name="cor" required>
+              <option value="">Selecione...</option>
+              <option>Branco</option>
+              <option>Preto</option>
+              <option>Pardo</option>
+              <option>Amarelo</option>
+              <option>Indígena</option>
+              <option>Prefere não informar</option>
+            </select>
+          </div>
+
+          <div class="campo">
+            <label for="naturalidade">Naturalidade <span class="obrigatorio">*</span></label>
+            <input type="text" id="naturalidade" name="naturalidade" placeholder="Cidade / Estado" required />
+          </div>
+
+          <div class="campo">
+            <label for="escolaridade">Escolaridade <span class="obrigatorio">*</span></label>
+            <select id="escolaridade" name="escolaridade" required>
+              <option value="">Selecione...</option>
+              <option>Sem escolaridade</option>
+              <option>Fundamental incompleto</option>
+              <option>Fundamental completo</option>
+              <option>Médio incompleto</option>
+              <option>Médio completo</option>
+              <option>Superior incompleto</option>
+              <option>Superior completo</option>
+              <option>Pós-graduação</option>
+            </select>
+          </div>
+
+          <div class="campo">
+            <label for="profissao">Profissão <span class="obrigatorio">*</span></label>
+            <input type="text" id="profissao" name="profissao" placeholder="Sua ocupação principal" required />
+          </div>
+
+        </div>
+      </section>
+
+      <!-- SEÇÃO 2 — Endereço e Contato -->
+      <section class="secao">
+        <h2 class="secao-titulo">📍 Contato e Endereço</h2>
+        <div class="grade grade-3">
+
+          <div class="campo">
+            <label for="cep">CEP <span class="obrigatorio">*</span></label>
+            <input type="text" id="cep" name="cep" placeholder="00000-000" maxlength="9" required />
+          </div>
+
+          <div class="campo" style="grid-column: span 2;">
+            <label for="endereco">Endereço</label>
+            <input type="text" id="endereco" name="endereco" placeholder="Preenchido automaticamente" readonly />
+          </div>
+
+          <div class="campo">
+            <label for="numero">Número <span class="obrigatorio">*</span></label>
+            <input type="text" id="numero" name="numero" placeholder="Ex: 196" required />
+          </div>
+
+          <div class="campo">
+            <label for="bairro">Bairro</label>
+            <input type="text" id="bairro" name="bairro" placeholder="Preenchido automaticamente" readonly />
+          </div>
+
+          <div class="campo">
+            <label for="cidade">Cidade</label>
+            <input type="text" id="cidade" name="cidade" placeholder="Preenchida automaticamente" readonly />
+          </div>
+
+          <div class="campo">
+            <label for="complemento">Complemento</label>
+            <input type="text" id="complemento" name="complemento" placeholder="Apto, bloco, casa..." />
+          </div>
+
+          <div class="campo">
+            <label for="telefone">Telefone / WhatsApp <span class="obrigatorio">*</span></label>
+            <input type="tel" id="telefone" name="telefone" placeholder="(00) 00000-0000" maxlength="15" required />
+          </div>
+
+          <div class="campo" style="grid-column: span 2;">
+            <label for="email">E-mail <span class="obrigatorio">*</span></label>
+            <input type="email" id="email" name="email" placeholder="seu@email.com" required />
+          </div>
+
+        </div>
+      </section>
+
+      <!-- SEÇÃO 3 — Como nos encontrou -->
+      <section class="secao">
+        <h2 class="secao-titulo">🔍 Como Nos Encontrou?</h2>
+        <div class="campo">
+          <label for="indicacao">Indicação <span class="obrigatorio">*</span></label>
+          <select id="indicacao" name="indicacao" required>
+            <option value="">Selecione...</option>
+            <option value="google">Google</option>
+            <option value="indicacao-medica">Indicação médica</option>
+            <option value="indicacao-paciente">Indicação de paciente</option>
+            <option value="instagram">Instagram</option>
+          </select>
+        </div>
+
+        <!-- Submenu Google -->
+        <div id="sub-google" class="subindicacao">
+          <label
+            style="font-family:'League Spartan',sans-serif;font-size:0.82rem;font-weight:600;color:var(--cor-texto-sec);text-transform:uppercase;letter-spacing:0.5px;">
+            Onde no Google?
+          </label>
+          <select id="google-origem" name="googleOrigem">
+            <option value="">Selecione...</option>
+            <option>Doctoralia</option>
+            <option>Site oficial</option>
+            <option>Outro</option>
+          </select>
+        </div>
+
+        <!-- Submenu indicação médica -->
+        <div id="sub-medico" class="subindicacao">
+          <label for="medico-indicante"
+            style="font-family:'League Spartan',sans-serif;font-size:0.82rem;font-weight:600;color:var(--cor-texto-sec);text-transform:uppercase;letter-spacing:0.5px;">
+            Nome do médico que indicou
+          </label>
+          <input type="text" id="medico-indicante" name="medicoIndicante" placeholder="Dr(a). ..." />
+        </div>
+
+        <!-- Submenu indicação paciente -->
+        <div id="sub-paciente" class="subindicacao">
+          <label for="paciente-indicante"
+            style="font-family:'League Spartan',sans-serif;font-size:0.82rem;font-weight:600;color:var(--cor-texto-sec);text-transform:uppercase;letter-spacing:0.5px;">
+            Nome do paciente que indicou
+          </label>
+          <input type="text" id="paciente-indicante" name="pacienteIndicante" placeholder="Nome do paciente..." />
+        </div>
+      </section>
+
+      <!-- SEÇÃO 4 — Exames e Queixa -->
+      <section class="secao">
+        <h2 class="secao-titulo">🩺 Exames e Queixa Principal</h2>
+
+        <!-- Upload de arquivos -->
+        <div class="campo">
+          <label>Anexar Exames <span class="obrigatorio">*</span></label>
+          <div class="upload-area" id="upload-area" role="button" aria-label="Área de upload de exames">
+            <input type="file" id="input-arquivos" multiple accept=".pdf,.jpg,.jpeg,.png,.webp,.heic,.heif"
+              aria-label="Selecionar arquivos de exames" />
+            <div class="upload-icon">📎</div>
+            <div class="upload-texto">Clique ou arraste seus exames aqui</div>
+            <div class="upload-info">PDF e imagens (JPG, PNG) — máximo 10 MB por arquivo</div>
+          </div>
+          <div class="upload-lista" id="lista-arquivos"></div>
+          <div class="sem-exames-wrap">
+            <input type="checkbox" id="sem-exames" name="semExames" />
+            <label for="sem-exames">Não tenho exames para anexar no momento</label>
+          </div>
+        </div>
+
+        <!-- Queixa principal -->
+        <div class="campo mt-16">
+          <label for="queixa">Queixa Principal <span class="obrigatorio">*</span></label>
+          <textarea id="queixa" name="queixa" required
+            placeholder="Descreva em poucas palavras o motivo da sua consulta..."></textarea>
+        </div>
+
+        <!-- LGPD -->
+        <div class="campo mt-16">
+          <div class="sem-exames-wrap"
+            style="align-items: flex-start; background: #f8f9fa; padding: 15px; border-radius: 8px; border: 1px solid var(--cor-borda);">
+            <input type="checkbox" id="lgpd" name="lgpd" required style="margin-top: 4px;" />
+            <label for="lgpd" style="line-height: 1.5; font-weight: normal; font-size: 0.9rem; color: #444;">
+              Autorizo o tratamento dos meus dados pessoais e sensíveis para fins de agendamento e pré-consulta médica,
+              ciente de que serão mantidos em sigilo. <span class="obrigatorio">*</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Botão enviar -->
+        <div class="mt-16" style="display: flex; gap: 10px; flex-wrap: wrap;">
+          <button type="submit" class="btn-primario" id="btn-enviar">
+            <span>Enviar pré-consulta</span>
+            <span>→</span>
+          </button>
+
+          <button type="button" class="btn-secundario" id="btn-auto-preencher" onclick="autoPreencherTeste()"
+            style="background: #f0f0f0; border: 1px solid #ccc; color: #555; padding: 10px 15px; border-radius: 8px; font-weight: 600; cursor: pointer;">
+            ⚡ Auto-preencher (Teste)
+          </button>
+        </div>
+      </section>
+
+    </form>
+
+    <!-- ====================== TELA DE SUCESSO ====================== -->
+    <div id="tela-sucesso">
+      <div class="icone-ok">✅</div>
+      <h2>Dados enviados com sucesso!</h2>
+      <p>Suas informações foram registradas.<br />
+        Você pode fechar esta página — nos vemos em breve!</p>
+    </div>
+
+    <!-- ====================== PAINEL DO MÉDICO ====================== -->
+    <div id="painel-medico">
+      <div class="painel-header">
+        <h2>🩺 Painel Médico</h2>
+        <button class="btn-secundario" id="btn-sair-painel">Sair do painel</button>
+      </div>
+      <div id="lista-pacientes"></div>
+    </div>
+
+  </main>
+
+  <!-- ============================================================
+     RODAPÉ — botão discreto de acesso médico
+     ============================================================ -->
+  <footer>
+    <div>© 2026 · Dr. Igor Campana</div>
+    <div>
+      <button id="btn-acesso-medico" aria-label="Acesso médico">acesso médico</button>
+    </div>
+  </footer>
+
+  <!-- ============================================================
+     MODAL DE LOGIN MÉDICO
+     ============================================================ -->
+  <div id="modal-login" class="modal-overlay oculto" role="dialog" aria-modal="true" aria-labelledby="modal-titulo">
+    <div class="modal-box">
+      <h2 id="modal-titulo">🔐 Acesso Médico</h2>
+      <input type="email" id="input-email" placeholder="E-mail" aria-label="E-mail médico" />
+      <input type="password" id="input-senha" placeholder="Senha de acesso" aria-label="Senha médica" />
+      <div id="erro-senha" class="modal-erro oculto">Login inválido. Tente novamente.</div>
+      <button class="btn-primario" id="btn-confirmar-login">Entrar</button>
+      <button class="btn-secundario mt-8" id="btn-cancelar-login" style="width:100%;margin-top:10px;">Cancelar</button>
+    </div>
+  </div>
+
+  <!-- ============================================================
+     SPINNER DE PROCESSAMENTO
+     ============================================================ -->
+  <div id="spinner" class="spinner-overlay oculto" role="status" aria-live="polite">
+    <div class="spinner"></div>
+    <div class="spinner-texto">Aguarde</div>
+  </div>
+  <!-- ============================================================
+     JAVASCRIPT PRINCIPAL
+     ============================================================ -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    // ================================================================
+    // CONFIGURAÇÕES
+    // ================================================================
+    // Configurações Supabase
+    const SUPABASE_URL = "https://zahsexlxlaxtkarutznc.supabase.co";
+    const SUPABASE_ANON_KEY =
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InphaHNleGx4bGF4dGthcnV0em5jIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIwMDQ3OTMsImV4cCI6MjA4NzU4MDc5M30.2BJH1rlHPFCEOGdPKd_Pv1m7BcdQKYTqADt9WG9shEY";
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // ================================================================
+    // ================================================================
+    // ESTADO DA APLICAÇÃO
+    // ================================================================
+    let arquivosSelecionados = []; // lista de File objects
+
+    // ================================================================
+    // UTILITÁRIOS — máscaras e formatações
+    // ================================================================
+
+    /** Aplica máscara de CPF: 000.000.000-00 */
+    function mascaraCPF(valor) {
+      return valor.replace(/\D/g, '')
+        .replace(/(\d{3})(\d)/, '$1.$2')
+        .replace(/(\d{3})(\d)/, '$1.$2')
+        .replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+    }
+
+    /** Aplica máscara de telefone: (00) 00000-0000 */
+    function mascaraTelefone(valor) {
+      let v = valor.replace(/\D/g, '');
+      if (v.length <= 10) { return v.replace(/(\d{2})(\d{4})(\d{0,4})/, '($1) $2-$3'); }
+      return v.replace(/(\d{2})(\d{5})(\d{0,4})/, '($1) $2-$3');
+    }
+
+    /** Aplica máscara de CEP: 00000-000 */
+    function mascaraCEP(valor) {
+      return valor.replace(/\D/g, '').replace(/(\d{5})(\d)/, '$1-$2');
+    }
+
+    /** Formata uma data ISO para DD/MM/AAAA */
+    function formatarData(iso) {
+      if (!iso) return '';
+      const [ano, mes, dia] = iso.split('-');
+      return `${dia}/${mes}/${ano}`;
+    }
+
+    /** Formata timestamp para exibição no painel */
+    function formatarTimestamp(ts) {
+      if (!ts) return '';
+      const data = new Date(ts);
+      const dia = String(data.getDate()).padStart(2, '0');
+      const mes = String(data.getMonth() + 1).padStart(2, '0');
+      const ano = data.getFullYear();
+      const hora = String(data.getHours()).padStart(2, '0');
+      const min = String(data.getMinutes()).padStart(2, '0');
+      return `${dia}/${mes}/${ano} às ${hora}:${min}`;
+    }
+    /** Converte markdown **negrito** para HTML <strong>, após escapar XSS */
+    function markdownParaHTML(texto) {
+      if (!texto) return '';
+      // 1. Escapa tudo primeiro
+      let html = escapeHTML(texto);
+      // 2. Transforma markdown simples para tags HTML, apenas nos trechos já seguros
+      html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+      // 3. Preserva as quebras de linha substituindo \n por <br>
+      html = html.replace(/\n/g, '<br>');
+      return html;
+    }
+
+    // ================================================================
+    // MÁSCARAS — eventos de input
+    // ================================================================
+    document.getElementById('cpf').addEventListener('input', function () {
+      this.value = mascaraCPF(this.value);
+    });
+    document.getElementById('telefone').addEventListener('input', function () {
+      this.value = mascaraTelefone(this.value);
+    });
+    document.getElementById('cep').addEventListener('input', function () {
+      this.value = mascaraCEP(this.value);
+      if (this.value.replace(/\D/g, '').length === 8) buscarCEP(this.value);
+    });
+
+    // ================================================================
+    // VIACEEP — preenchimento automático de endereço
+    // ================================================================
+    async function buscarCEP(cep) {
+      const numerico = cep.replace(/\D/g, '');
+      if (numerico.length !== 8) return;
+      try {
+        const resp = await fetch(`https://viacep.com.br/ws/${numerico}/json/`);
+        const dados = await resp.json();
+        if (!dados.erro) {
+          document.getElementById('endereco').value = dados.logradouro || '';
+          document.getElementById('bairro').value = dados.bairro || '';
+          document.getElementById('cidade').value = dados.localidade || '';
+        }
+      } catch (e) {
+        // Falha no CEP: remove 'readonly' para o paciente digitar manualmente
+        document.getElementById('endereco').removeAttribute('readonly');
+        document.getElementById('bairro').removeAttribute('readonly');
+        document.getElementById('cidade').removeAttribute('readonly');
+        mostrarToast('Não conseguimos buscar seu CEP. Por favor, preencha o endereço manualmente.', 'erro');
+      }
+    }
+
+    // ================================================================
+    // UPLOAD DE ARQUIVOS — drag & drop e seleção
+    // ================================================================
+    const uploadArea = document.getElementById('upload-area');
+    const inputArquivos = document.getElementById('input-arquivos');
+    const listaArquivos = document.getElementById('lista-arquivos');
+    const semExamesChk = document.getElementById('sem-exames');
+
+    inputArquivos.addEventListener('change', () => {
+      adicionarArquivos(Array.from(inputArquivos.files));
+      inputArquivos.value = ''; // limpa para permitir reenvio do mesmo arquivo
+    });
+
+    uploadArea.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      uploadArea.classList.add('drag-over');
+    });
+    uploadArea.addEventListener('dragleave', () => uploadArea.classList.remove('drag-over'));
+    uploadArea.addEventListener('drop', (e) => {
+      e.preventDefault();
+      uploadArea.classList.remove('drag-over');
+
+      let arquivosExtraidos = [];
+      if (e.dataTransfer.items) {
+        for (let i = 0; i < e.dataTransfer.items.length; i++) {
+          const item = e.dataTransfer.items[i]; if (item.kind === 'file') { const file = item.getAsFile(); if (file) arquivosExtraidos.push(file); }
+        }
+      } else if (e.dataTransfer.files) {
+        arquivosExtraidos = Array.from(e.dataTransfer.files);
+      } if (arquivosExtraidos.length > 0) {
+        adicionarArquivos(arquivosExtraidos);
+      }
+    });
+
+    const MAX_FILE_SIZE_MB = 10;
+    const MAX_FILES = 8;
+    const EXTENSOES_PERMITIDAS = ['.pdf', '.jpg', '.jpeg', '.png', '.webp', '.heic', '.heif'];
+    const TIPOS_PERMITIDOS = [
+      'application/pdf',
+      'image/jpeg', 'image/png', 'image/webp', 'image/heic', 'image/heif'
+    ];
+
+    function validarArquivo(f) {
+      if (!f || !(f instanceof File)) return { ok: false, erro: 'Item inválido.' };
+      if (!f.name || f.name.trim() === '') return { ok: false, erro: 'Arquivo sem nome válido.' };
+
+      const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
+      if (f.size <= 0) return { ok: false, erro: `Arquivo vazio: ${f.name}` }; if (f.size > MAX_FILE_SIZE_BYTES) return {
+        ok: false, erro: `Excede ${MAX_FILE_SIZE_MB}MB: ${f.name}`
+      };
+
+      const extMatch = f.name.match(/\.[0-9a-z]+$/i);
+      const ext = extMatch ? extMatch[0].toLowerCase() : '';
+      if (!ext) return { ok: false, erro: `Sem extensão: ${f.name}` };
+
+      const tipoValido = TIPOS_PERMITIDOS.includes(f.type) || EXTENSOES_PERMITIDAS.includes(ext);
+      if (!tipoValido) return { ok: false, erro: `Formato inválido: ${f.name}` };
+
+      return { ok: true };
+    }
+
+    function adicionarArquivos(novos) {
+      if (!Array.isArray(novos)) return;
+      let mensagensErro = new Set();
+      let algumAdicionado = false;
+
+      novos.forEach(f => {
+        if (arquivosSelecionados.length >= MAX_FILES) {
+          mensagensErro.add(`Limite máximo de ${MAX_FILES} arquivos atingido.`);
+          return;
+        }
+
+        const val = validarArquivo(f);
+        if (!val.ok) {
+          mensagensErro.add(val.erro);
+          return;
+        }
+
+        const ehDuplicado = arquivosSelecionados.some(x =>
+          x.name === f.name &&
+          x.size === f.size &&
+          x.lastModified === f.lastModified
+        );
+
+        if (ehDuplicado) {
+          mensagensErro.add(`Já anexado: ${f.name}`);
+          return;
+        }
+
+        arquivosSelecionados.push(f);
+        algumAdicionado = true;
+      });
+
+      if (mensagensErro.size > 0) {
+        const errArray = Array.from(mensagensErro);
+        mostrarToast('⚠️ Aviso: ' + errArray.slice(0, 3).join(' | ') + (errArray.length > 3 ? '...' : ''), 'erro');
+      }
+
+      if (algumAdicionado && semExamesChk.checked) {
+        semExamesChk.checked = false;
+        uploadArea.style.opacity = '1';
+        uploadArea.style.pointerEvents = 'auto';
+        uploadArea.style.borderColor = '';
+      }
+
+      renderizarListaArquivos();
+    }
+
+    function removerArquivo(idx) {
+      arquivosSelecionados.splice(idx, 1);
+      renderizarListaArquivos();
+    }
+
+    function renderizarListaArquivos() {
+      listaArquivos.innerHTML = '';
+      arquivosSelecionados.forEach((f, i) => {
+        const item = document.createElement('div');
+        item.className = 'upload-item';
+        item.innerHTML = `
+        <span title="${f.name}">📄 ${f.name}</span>
+        <span style="color:var(--cor-texto-sec);white-space:nowrap;font-size:0.75rem;">
+          ${(f.size / 1024 / 1024).toFixed(2)} MB
+        </span>
+        <button type="button" onclick="removerArquivo(${i})" aria-label="Remover ${f.name}">✕</button>
+        `;
+        listaArquivos.appendChild(item);
+      });
+    }
+
+    // Checkbox "sem exames" limpa estado e desativa obrigatoriedade de upload
+    semExamesChk.addEventListener('change', () => {
+      if (semExamesChk.checked) {
+        arquivosSelecionados = [];
+        renderizarListaArquivos();
+        uploadArea.style.opacity = '0.45';
+        uploadArea.style.pointerEvents = 'none';
+        uploadArea.style.borderColor = ''; // Limpa estado de erro residual
+      } else {
+        uploadArea.style.opacity = '1';
+        uploadArea.style.pointerEvents = 'auto';
+      }
+    });
+
+    // ================================================================
+    // INDICAÇÃO — submenus dinâmicos
+    // ================================================================
+    document.getElementById('indicacao').addEventListener('change', function () {
+      document.querySelectorAll('.subindicacao').forEach(el => el.classList.remove('visivel'));
+      if (this.value === 'google') document.getElementById('sub-google').classList.add('visivel');
+      if (this.value === 'indicacao-medica') document.getElementById('sub-medico').classList.add('visivel');
+      if (this.value === 'indicacao-paciente') document.getElementById('sub-paciente').classList.add('visivel');
+    });
+
+    // ================================================================
+    // VALIDAÇÃO DO FORMULÁRIO
+    // ================================================================
+    function validarFormulario() {
+      let valido = true;
+      const camposObrigatorios = [
+        'nome', 'nascimento', 'cpf', 'estado-civil', 'cor',
+        'naturalidade', 'escolaridade', 'profissao',
+        'cep', 'numero', 'telefone', 'email', 'indicacao', 'queixa'
+      ];
+
+      // Remover marcação de erro anterior
+      document.querySelectorAll('.erro').forEach(el => el.classList.remove('erro'));
+
+      camposObrigatorios.forEach(id => {
+        const el = document.getElementById(id);
+        if (!el || !el.value.trim()) {
+          if (el) el.classList.add('erro');
+          valido = false;
+        }
+      });
+
+      // Validar LGPD
+      const lgpdChk = document.getElementById('lgpd');
+      if (!lgpdChk.checked) {
+        lgpdChk.parentElement.style.borderColor = 'var(--cor-erro)';
+        valido = false;
+      } else {
+        lgpdChk.parentElement.style.borderColor = 'var(--cor-borda)';
+      }
+
+      // Validar e-mail
+      const emailEl = document.getElementById('email');
+      if (emailEl.value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailEl.value)) {
+        emailEl.classList.add('erro');
+        valido = false;
+      }
+
+      // Upload: pelo menos 1 arquivo ou checkbox marcado
+      if (arquivosSelecionados.length === 0 && !semExamesChk.checked) {
+        uploadArea.style.borderColor = 'var(--cor-erro)';
+        valido = false;
+      } else {
+        uploadArea.style.borderColor = '';
+      }
+
+      // Revalidação defensiva final nos anexos antes do submit
+      if (arquivosSelecionados.length > 0) {
+        for (const file of arquivosSelecionados) {
+          const val = validarArquivo(file);
+          if (!val.ok) {
+            uploadArea.style.borderColor = 'var(--cor-erro)';
+            mostrarToast('Remova o arquivo inválido para continuar: ' + val.erro, 'erro');
+            return false;
+          }
+        }
+      }
+
+      return valido;
+    }
+
+    // ================================================================
+    // UPLOAD PARA SUPABASE STORAGE
+    // ================================================================
+
+    async function uploadExames(arquivos, timestamp) {
+      if (arquivos.length === 0) return [];
+
+      const listaAnexos = [];
+
+      for (const file of arquivos) {
+        try {
+          const safeName = String(file.name || 'arquivo')
+            .replace(/[\/\\]/g, '_')
+            .replace(/\.\./g, '_')
+            .replace(/[^a-zA-Z0-9._-]/g, '_')
+            .slice(0, 120);
+          const path = `${timestamp}/${safeName}`;
+
+          // Faz upload do arquivo
+          const { error: uploadError } = await supabaseClient.storage
+            .from('exames')
+            .upload(path, file);
+
+          if (uploadError) {
+            console.error(`Erro ao fazer upload do arquivo ${file.name}:`, uploadError);
+            continue; // Se um falhar, tenta os próximos
+          }
+
+          listaAnexos.push({
+            nome: file.name,
+            path: path
+          });
+
+        } catch (err) {
+          console.error(`Exceção processando arquivo ${file.name}:`, err);
+        }
+      }
+
+      return listaAnexos;
+    }
+
+    // ================================================================
+    // PERSISTÊNCIA — Supabase
+    // ================================================================
+
+    async function carregarPacientes() {
+      try {
+        const { data, error } = await supabaseClient
+          .from('pacientes_preconsulta')
+          .select('timestamp_cliente, dados, exames, created_at')
+          .order('created_at', { ascending: false });
+
+        if (error) throw error;
+
+        return data.map(row => ({
+          timestamp: row.timestamp_cliente,
+          dados: row.dados,
+          exames: row.exames,
+          created_at: row.created_at
+        }));
+      } catch (err) {
+        console.error('Erro ao carregar do Supabase:', err);
+        mostrarToast('Erro ao carregar lista de pacientes.', 'erro');
+        return [];
+      }
+    }
+
+    async function adicionarPaciente(entrada) {
+      try {
+        console.log('Tentando salvar paciente:', entrada);
+        const { error } = await supabaseClient
+          .from('pacientes_preconsulta')
+          .insert({
+            timestamp_cliente: entrada.timestamp,
+            dados: entrada.dados,
+            exames: entrada.exames
+          });
+
+        if (error) {
+          console.error('Erro retornado pelo Supabase:', error);
+          throw error;
+        }
+        console.log('Paciente salvo com sucesso!');
+      } catch (err) {
+        console.error('Exceção ao inserir no Supabase:', err);
+        const msg = err.message || err.details || 'Erro desconhecido';
+        mostrarToast(`Erro ao salvar paciente: ${msg}`, 'erro');
+        throw err;
+      }
+    }
+
+    async function excluirPaciente(timestamp) {
+      try {
+        const { error } = await supabaseClient
+          .from('pacientes_preconsulta')
+          .delete()
+          .eq('timestamp_cliente', timestamp);
+
+        if (error) throw error;
+      } catch (err) {
+        console.error('Erro ao excluir no Supabase:', err);
+        mostrarToast('Erro ao excluir paciente. Tente novamente.', 'erro');
+        throw err;
+      }
+    }
+
+    // ================================================================
+    // MONTAR BLOCO DE TEXTO DO PACIENTE
+    // (formato pronto para copiar no prontuário)
+    // ================================================================
+    function montarBlocoTexto(p) {
+      const dados = p.dados;
+      const indicacaoFormatada = formatarIndicacao(dados);
+
+      return [
+        `Nome completo: ${dados.nome}`,
+        `Data de nascimento: ${formatarData(dados.nascimento)}`,
+        `CPF: ${dados.cpf}`,
+        `Estado civil: ${dados.estadoCivil}`,
+        `Cor autodeclarada: ${dados.cor}`,
+        `Naturalidade: ${dados.naturalidade}`,
+        `Escolaridade: ${dados.escolaridade}`,
+        `Profissão: ${dados.profissao}`,
+        `Endereço: ${dados.endereco}, ${dados.numero}${dados.complemento ? ', ' + dados.complemento : ''}`,
+        `Bairro: ${dados.bairro}`,
+        `Cidade: ${dados.cidade}`,
+        `CEP: ${dados.cep}`,
+        `Telefone: ${dados.telefone}`,
+        `E-mail: ${dados.email}`,
+        `Indicação: ${indicacaoFormatada}`,
+        ``,
+        `Queixa principal: ${dados.queixa}`,
+        ``,
+        `Exames em anexo (Ver links no sistema)`
+      ].join('\n');
+    }
+
+    function formatarIndicacao(dados) {
+      switch (dados.indicacao) {
+        case 'google':
+          return `Google${dados.googleOrigem ? ' → ' + dados.googleOrigem : ''}`;
+        case 'indicacao-medica':
+          return `Indicação médica${dados.medicoIndicante ? ' — ' + dados.medicoIndicante : ''}`;
+        case 'indicacao-paciente':
+          return `Indicação de paciente${dados.pacienteIndicante ? ' — ' + dados.pacienteIndicante : ''}`;
+        case 'instagram': return 'Instagram';
+        default: return dados.indicacao || '';
+      }
+    }
+
+    // ================================================================
+    // ENVIO DO FORMULÁRIO
+    // ================================================================
+    document.getElementById('form-paciente').addEventListener('submit', async function (e) {
+      e.preventDefault();
+
+      if (!validarFormulario()) {
+        mostrarToast('Por favor, preencha todos os campos obrigatórios.', 'erro');
+        // Scrolla para o primeiro campo com erro
+        const primeiro = document.querySelector('.erro, [style*="border-color: var(--cor-erro)"]');
+        if (primeiro) primeiro.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return;
+      }
+
+      // Coleta dados do formulário
+      const dados = {
+        nome: document.getElementById('nome').value.trim(),
+        nascimento: document.getElementById('nascimento').value,
+        cpf: document.getElementById('cpf').value.trim(),
+        estadoCivil: document.getElementById('estado-civil').value,
+        cor: document.getElementById('cor').value,
+        naturalidade: document.getElementById('naturalidade').value.trim(),
+        escolaridade: document.getElementById('escolaridade').value,
+        profissao: document.getElementById('profissao').value.trim(),
+        cep: document.getElementById('cep').value.trim(),
+        endereco: document.getElementById('endereco').value.trim(),
+        numero: document.getElementById('numero').value.trim(),
+        bairro: document.getElementById('bairro').value.trim(),
+        cidade: document.getElementById('cidade').value.trim(),
+        complemento: document.getElementById('complemento').value.trim(),
+        telefone: document.getElementById('telefone').value.trim(),
+        email: document.getElementById('email').value.trim(),
+        indicacao: document.getElementById('indicacao').value,
+        googleOrigem: document.getElementById('google-origem').value,
+        medicoIndicante: document.getElementById('medico-indicante').value.trim(),
+        pacienteIndicante: document.getElementById('paciente-indicante').value.trim(),
+        queixa: document.getElementById('queixa').value.trim(),
+        semExames: semExamesChk.checked
+      };
+
+      // Mostra spinner e desabilita botão
+      mostrarSpinner(true);
+      const btnEnviar = document.getElementById('btn-enviar');
+      btnEnviar.disabled = true;
+
+      try {
+        // 1. Prepara dados principais
+        const timestampEntrada = Date.now() + Math.floor(Math.random() * 1000);
+        let examesSalvos = [];
+
+        // 2. Faz o envio simultâneo/sequencial dos arquivos pro Storage
+        if (arquivosSelecionados.length > 0) {
+          examesSalvos = await uploadExames(arquivosSelecionados, timestampEntrada);
+          if (examesSalvos.length === 0) {
+            mostrarToast('Houve um problema isolado no upload de exames. O agendamento continuará.', 'erro');
+          }
+        }
+
+        // 3. Salva no banco (Bloqueante)
+        const entrada = {
+          timestamp: timestampEntrada,
+          dados,
+          exames: JSON.stringify(examesSalvos) // Salva o array de objetos no BD (ou string vazia se ngm enviou)
+        };
+
+        await adicionarPaciente(entrada);
+
+        // 4. Sucesso no banco: Esconde form e mostra tela de sucesso
+        document.getElementById('form-paciente').style.display = 'none';
+        document.getElementById('tela-sucesso').style.display = 'block';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      } catch (err) {
+        console.error('Erro crítico no envio:', err);
+        // O toast de erro já é disparado dentro de adicionarPaciente
+      } finally {
+        mostrarSpinner(false);
+        btnEnviar.disabled = false;
+      }
+    });
+
+    /** Auto-preenche o formulário com dados de teste */
+    function autoPreencherTeste() {
+      const dummy = {
+        nome: 'Paciente de Teste Antigravity',
+        nascimento: '1990-01-01',
+        cpf: '123.456.789-00',
+        'estado-civil': 'Solteiro(a)',
+        cor: 'Pardo',
+        naturalidade: 'São Paulo / SP',
+        escolaridade: 'Superior completo',
+        profissao: 'Desenvolvedor de Software',
+        cep: '01001-000',
+        endereco: 'Praça da Sé',
+        numero: '100',
+        bairro: 'Sé',
+        cidade: 'São Paulo',
+        telefone: '(11) 98765-4321',
+        email: 'teste@exemplo.com',
+        indicacao: 'google',
+        queixa: 'Esta é uma queixa de teste automática para validar o fluxo de salvamento e IA.'
+      };
+
+      for (const [id, valor] of Object.entries(dummy)) {
+        const el = document.getElementById(id);
+        if (el) el.value = valor;
+      }
+
+      // Ativa checkbox de sem exames para facilitar teste rápido
+      const checkSemExames = document.getElementById('sem-exames');
+      if (checkSemExames) {
+        checkSemExames.checked = true;
+        // Dispara evento manual para atualizar UI
+        checkSemExames.dispatchEvent(new Event('change'));
+      }
+
+      mostrarToast('Formulário preenchido com dados de teste!', 'sucesso');
+    }
+
+    // ================================================================
+    // PAINEL DO MÉDICO
+    // ================================================================
+
+    // Abre o modal de login ou vai direto se autenticado
+    document.getElementById('btn-acesso-medico').addEventListener('click', async () => {
+      mostrarSpinner(true);
+      try {
+        const { data } = await supabaseClient.auth.getSession();
+        if (data.session) {
+          await abrirPainel();
+        } else {
+          document.getElementById('modal-login').classList.remove('oculto');
+          document.getElementById('input-email').value = '';
+          document.getElementById('input-senha').value = '';
+          document.getElementById('erro-senha').classList.add('oculto');
+          document.getElementById('input-email').focus();
+        }
+      } finally {
+        mostrarSpinner(false);
+      }
+    });
+
+    // Fecha modal ao clicar em cancelar
+    document.getElementById('btn-cancelar-login').addEventListener('click', () => {
+      document.getElementById('modal-login').classList.add('oculto');
+    });
+
+    // Fecha modal ao clicar fora da caixa
+    document.getElementById('modal-login').addEventListener('click', function (e) {
+      if (e.target === this) this.classList.add('oculto');
+    });
+
+    // Permite confirmar com Enter no campo de senha
+    document.getElementById('input-senha').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') confirmarLogin();
+    });
+    document.getElementById('input-email').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') document.getElementById('input-senha').focus();
+    });
+
+    document.getElementById('btn-confirmar-login').addEventListener('click', confirmarLogin);
+
+    async function confirmarLogin() {
+      const email = document.getElementById('input-email').value.trim();
+      const senha = document.getElementById('input-senha').value;
+
+      if (!email || !senha) {
+        document.getElementById('erro-senha').textContent = 'Preencha email e senha.';
+        document.getElementById('erro-senha').classList.remove('oculto');
+        return;
+      }
+
+      mostrarSpinner(true);
+      try {
+        const { error } = await supabaseClient.auth.signInWithPassword({
+          email: email,
+          password: senha
+        });
+
+        if (!error) {
+          document.getElementById('modal-login').classList.add('oculto');
+          await abrirPainel();
+        } else {
+          console.error('Erro no login:', error.message);
+          document.getElementById('erro-senha').textContent = 'Login inválido. Tente novamente.';
+          document.getElementById('erro-senha').classList.remove('oculto');
+          document.getElementById('input-senha').value = '';
+          document.getElementById('input-senha').focus();
+        }
+      } finally {
+        mostrarSpinner(false);
+      }
+    }
+
+    async function abrirPainel() {
+      // Revalidação robusta de Sessão antes de mostrar dados sensíveis
+      mostrarSpinner(true);
+      try {
+        const { data: { session } } = await supabaseClient.auth.getSession();
+        if (!session) {
+          document.getElementById('painel-medico').style.display = 'none';
+          document.getElementById('form-paciente').style.display = '';
+          document.getElementById('modal-login').classList.remove('oculto');
+          document.getElementById('input-email').value = '';
+          document.getElementById('input-senha').value = '';
+          document.getElementById('erro-senha').textContent = 'Sua sessão expirou. Faça login novamente.';
+          document.getElementById('erro-senha').classList.remove('oculto');
+          return;
+        }
+
+        // Esconde o formulário e mostra o painel
+        document.getElementById('form-paciente').style.display = 'none';
+        document.getElementById('tela-sucesso').style.display = 'none';
+        document.getElementById('painel-medico').style.display = 'block';
+        await renderizarPainel();
+      } finally {
+        mostrarSpinner(false);
+      }
+    }
+
+    document.getElementById('btn-sair-painel').addEventListener('click', async () => {
+      mostrarSpinner(true);
+      try {
+        await supabaseClient.auth.signOut();
+        document.getElementById('painel-medico').style.display = 'none';
+        document.getElementById('form-paciente').style.display = '';
+        mostrarToast('Logout realizado', 'sucesso');
+      } finally {
+        mostrarSpinner(false);
+      }
+    });
+
+    function safeHref_(url) {
+      if (!url) return '';
+      const u = String(url).trim();
+      if (u.startsWith('https://') || u.startsWith('http://')) return u;
+      return '';
+    }
+
+    function normalizarExames_(raw) {
+      if (!raw) return [];
+      if (Array.isArray(raw)) return raw;
+      if (typeof raw === 'string') {
+        const s = raw.trim();
+        if (!s || s === '[]') return [];
+        try {
+          const parsed = JSON.parse(s);
+          return Array.isArray(parsed) ? parsed : [];
+        } catch (e) {
+          throw new Error('Fallback para legado');
+        }
+      }
+      return [];
+    }
+
+    async function renderizarPainel() {
+      mostrarSpinner(true);
+      try {
+        const container = document.getElementById('lista-pacientes');
+        container.innerHTML = '';
+
+        const lista = await carregarPacientes();
+
+        if (lista.length === 0) {
+          container.innerHTML = `
+        <div class="lista-vazia">
+          <div class="icone">📂</div>
+          <p>Nenhum paciente registrado ainda.</p>
+        </div>`;
+          return;
+        }
+
+        const fragment = document.createDocumentFragment();
+
+        for (const paciente of lista) {
+          const card = document.createElement('div');
+          card.className = 'paciente-card';
+          card.id = `card-${paciente.timestamp}`;
+
+          const bloco = montarBlocoTexto(paciente);
+          const blocoHTML = escapeHTML(bloco).replace(/\n/g, '<br>');
+
+          // Renderização condicional para os exames:
+          let renderExames = '';
+          try {
+            const examesArray = normalizarExames_(paciente.exames);
+            if (examesArray.length > 0) {
+              renderExames = '<div class="links-exames" style="margin-top: 20px; padding-top: 15px; border-top: 1px solid var(--cor-borda);">';
+              renderExames += '<p style="font-weight: 600; margin-bottom: 10px;">Exames Anexados:</p>';
+              renderExames += '<div style="display: flex; flex-wrap: wrap; gap: 8px;">';
+
+              for (const item of examesArray) {
+                let finalUrl = item.url || '';
+
+                if (item.path) {
+                  try {
+                    const { data, error: urlError } = await supabaseClient.storage
+                      .from('exames')
+                      .createSignedUrl(item.path, 86400); // 24h temporária
+
+                    if (!urlError && data?.signedUrl) {
+                      finalUrl = data.signedUrl;
+                    }
+                  } catch (err) {
+                    console.error('Erro dinâmico de SignedURL:', err);
+                  }
+                }
+
+                const safe = safeHref_(finalUrl);
+                if (!safe) {
+                  renderExames += `<span class="btn-secundario" style="opacity:.6;cursor:not-allowed;">🔗 Link indisponível</span>`;
+                } else {
+                  renderExames += `<a href="${safe}" target="_blank" rel="noopener noreferrer" class="btn-secundario" style="text-decoration: none;">📄 ${escapeHTML(item.nome)}</a>`;
+                }
+              }
+
+              renderExames += '</div></div>';
+            } else {
+              renderExames = '<p style="margin-top: 20px; margin-bottom: 0px; color:var(--cor-texto-sec)">Sem exames anexados</p>';
+            }
+          } catch (e) {
+            // Tratamento p/ o registro legado via IA ou string simples
+            if (paciente.exames && paciente.exames !== '[]') {
+              if (paciente.exames.toLowerCase().includes('sem exames')) {
+                renderExames = '<p style="margin-top: 20px; margin-bottom: 0px; color:var(--cor-texto-sec)">Sem exames anexados</p>';
+              } else {
+                // Legado markdown: mantemos escape simples sem formatar full markdown pois a biblioteca foi removida
+                renderExames = `<div style="margin-top: 20px; padding: 10px; background: whitesmoke;"><p style="font-size:0.85rem">Texto Legado:</p><br>${escapeHTML(paciente.exames).replace(/\n/g, '<br>')}</div>`;
+              }
+            } else {
+              renderExames = '<p style="margin-top: 20px; margin-bottom: 0px; color:var(--cor-texto-sec)">Sem exames anexados</p>';
+            }
+          }
+
+          card.innerHTML = `
+        <div class="paciente-card-header">
+          <div>
+            <div class="paciente-nome">${escapeHTML(paciente.dados.nome)}</div>
+            <div class="paciente-data">Preenchido em: ${paciente.created_at ? formatarTimestamp(paciente.created_at) :
+              formatarTimestamp(paciente.timestamp)}</div>
+          </div>
+          <div class="paciente-acoes">
+            <button class="btn-secundario" onclick="toggleDados(${paciente.timestamp})">
+              Ver dados
+            </button>
+            <button class="btn-perigo" onclick="excluirPacienteUI(${paciente.timestamp})">
+              Excluir
+            </button>
+          </div>
+        </div>
+        <div class="paciente-dados" id="dados-${paciente.timestamp}">
+          <div class="bloco-texto" id="bloco-${paciente.timestamp}">${blocoHTML}</div>
+          ${renderExames}
+          <div class="copiar-btn-wrap" style="margin-top: 20px;">
+            <button class="btn-secundario" onclick="copiarBloco(${paciente.timestamp}, '${encodeURIComponent(bloco).replace(/'/g, "%27")}')">
+              📋 Copiar texto
+            </button>
+          </div>
+        </div>
+        `;
+          fragment.appendChild(card);
+        }
+        container.appendChild(fragment);
+      } finally {
+        mostrarSpinner(false);
+      }
+    }
+
+    /** Alterna a exibição dos dados do paciente */
+    function toggleDados(timestamp) {
+      const el = document.getElementById(`dados-${timestamp}`);
+      if (el) el.classList.toggle('aberto');
+    }
+
+    /** Copia o bloco de texto para a área de transferência */
+    function copiarBloco(timestamp, encodedText) {
+      const texto = decodeURIComponent(encodedText);
+      navigator.clipboard.writeText(texto).then(() => {
+        mostrarToast('Copiado para a área de transferência!', 'sucesso');
+      }).catch(() => {
+        // Fallback para navegadores mais antigos
+        const ta = document.createElement('textarea');
+        ta.value = texto;
+        ta.style.position = 'fixed'; ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        mostrarToast('Copiado!', 'sucesso');
+      });
+    }
+
+    /** Exclui paciente após confirmação */
+    async function excluirPacienteUI(timestamp) {
+      if (!confirm('Deseja excluir permanentemente este paciente?')) return;
+
+      mostrarSpinner(true);
+      try {
+        await excluirPaciente(timestamp);
+        const card = document.getElementById(`card-${timestamp}`);
+        if (card) {
+          card.style.transition = 'opacity 0.3s, transform 0.3s';
+          card.style.opacity = '0'; card.style.transform = 'translateX(20px)';
+          setTimeout(() => {
+            card.remove();
+            const container = document.getElementById('lista-pacientes');
+            if (container.children.length === 0) {
+              container.innerHTML = `
+        <div class="lista-vazia">
+          <div class="icone">📂</div>
+          <p>Nenhum paciente registrado ainda.</p>
+        </div>`;
+            }
+          }, 320);
+        }
+      } catch (err) {
+        // Erro já exibido pelo toast
+      } finally {
+        mostrarSpinner(false);
+      }
+    }
+
+    /** Escapa HTML para prevenir XSS de modo seguro */
+    function escapeHTML(str) {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;').replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    // ================================================================
+    // FEEDBACK DE INTERFACE — spinner e toast
+    // ================================================================
+
+    function mostrarSpinner(visivel) {
+      const spinner = document.getElementById('spinner');
+      if (visivel) spinner.classList.remove('oculto');
+      else spinner.classList.add('oculto');
+    }
+
+    let toastTimer = null;
+    function mostrarToast(mensagem, tipo = 'sucesso') {
+      // Remove toast anterior se existir
+      const antigo = document.querySelector('.toast');
+      if (antigo) antigo.remove();
+      if (toastTimer) clearTimeout(toastTimer);
+
+      const toast = document.createElement('div');
+      toast.className = `toast ${tipo}`;
+      toast.textContent = mensagem;
+      document.body.appendChild(toast);
+
+      toastTimer = setTimeout(() => {
+        toast.style.transition = 'opacity 0.4s';
+        toast.style.opacity = '0';
+        setTimeout(() => toast.remove(), 420);
+      }, 3500);
+    }
+
+  </script>
+
+</body>
+
+</html>
