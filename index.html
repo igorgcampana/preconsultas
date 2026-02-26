@@ -718,7 +718,17 @@
   <!-- ============================================================
      CABEÇALHO PRINCIPAL
      ============================================================ -->
-  <header id="app-header">
+  <header id="app-header" style="position: relative;">
+    <div id="badge-logado" class="oculto"
+      style="position: absolute; top: 12px; right: 16px; font-size: 0.75rem; background: rgba(255,255,255,0.15); padding: 6px 10px; border-radius: 6px; display: flex; align-items: center; gap: 8px; font-family: 'League Spartan', sans-serif;">
+      <span title="Usuário Logado">🟢 <span id="header-email-logado"></span></span>
+      <button id="btn-header-painel"
+        style="background: none; border: none; color: white; cursor: pointer; font-size: 0.75rem; font-weight: 700; padding: 2px;">|
+        Painel</button>
+      <button id="btn-header-logout"
+        style="background: none; border: none; color: #ffadad; cursor: pointer; font-size: 0.75rem; font-weight: 700; padding: 2px;">|
+        Sair</button>
+    </div>
     <h1>Pré-Consulta Neurológica</h1>
     <p style="font-size:1.05rem;font-weight:600;opacity:0.95;margin-top:4px;">Dr. Igor Campana</p>
     <p style="font-size:0.85rem;font-weight:300;opacity:0.75;margin-top:4px;">Preencha com calma — seus dados são
@@ -970,7 +980,11 @@
     <div id="painel-medico">
       <div class="painel-header">
         <h2>🩺 Painel Médico</h2>
-        <button class="btn-secundario" id="btn-sair-painel">Sair do painel</button>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+          <button class="btn-secundario" id="btn-voltar-form" style="background: #f0f0f0;">📝 Formulário</button>
+          <button class="btn-perigo" id="btn-sair-painel"
+            style="background: transparent; color: var(--cor-texto-sec); border-color: #b0bec0;">🚪 Logout</button>
+        </div>
       </div>
       <div id="lista-pacientes"></div>
     </div>
@@ -1677,11 +1691,26 @@
       }
     }
 
+    async function checarSessaoGlobal() {
+      const { data: { session } } = await supabaseClient.auth.getSession();
+      const badge = document.getElementById('badge-logado');
+      const emailLogado = document.getElementById('header-email-logado');
+
+      if (session) {
+        badge.classList.remove('oculto');
+        emailLogado.textContent = session.user.email;
+      } else {
+        badge.classList.add('oculto');
+        emailLogado.textContent = '';
+      }
+      return session;
+    }
+
     async function abrirPainel() {
       // Revalidação robusta de Sessão antes de mostrar dados sensíveis
       mostrarSpinner(true);
       try {
-        const { data: { session } } = await supabaseClient.auth.getSession();
+        const session = await checarSessaoGlobal();
         if (!session) {
           document.getElementById('painel-medico').style.display = 'none';
           document.getElementById('form-paciente').style.display = '';
@@ -1703,16 +1732,32 @@
       }
     }
 
-    document.getElementById('btn-sair-painel').addEventListener('click', async () => {
+    async function fazerLogout() {
       mostrarSpinner(true);
       try {
         await supabaseClient.auth.signOut();
         document.getElementById('painel-medico').style.display = 'none';
         document.getElementById('form-paciente').style.display = '';
+        await checarSessaoGlobal();
         mostrarToast('Logout realizado', 'sucesso');
       } finally {
         mostrarSpinner(false);
       }
+    }
+
+    document.getElementById('btn-sair-painel').addEventListener('click', fazerLogout);
+    document.getElementById('btn-header-logout').addEventListener('click', fazerLogout);
+
+    document.getElementById('btn-voltar-form').addEventListener('click', async () => {
+      document.getElementById('painel-medico').style.display = 'none';
+      document.getElementById('tela-sucesso').style.display = 'none';
+      document.getElementById('form-paciente').style.display = '';
+      await checarSessaoGlobal();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    document.getElementById('btn-header-painel').addEventListener('click', async () => {
+      await abrirPainel();
     });
 
     function safeHref_(url) {
@@ -1948,7 +1993,7 @@
     // ================================================================
     window.addEventListener('DOMContentLoaded', async () => {
       try {
-        const { data: { session } } = await supabaseClient.auth.getSession();
+        const session = await checarSessaoGlobal();
         if (session) {
           // Já existe uma sessão ativa (logado)
           await abrirPainel();
