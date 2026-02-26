@@ -1943,6 +1943,21 @@
       }, 3500);
     }
 
+    // ================================================================
+    // VERIFICAÇÃO DE SESSÃO NA INICIALIZAÇÃO
+    // ================================================================
+    window.addEventListener('DOMContentLoaded', async () => {
+      try {
+        const { data: { session } } = await supabaseClient.auth.getSession();
+        if (session) {
+          // Já existe uma sessão ativa (logado)
+          await abrirPainel();
+        }
+      } catch (e) {
+        console.error('Erro ao verificar sessão inicial:', e);
+      }
+    });
+
   </script>
 
 </body>
